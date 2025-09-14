@@ -1,0 +1,77 @@
+/* Container for the entire form card */
+.educationCard {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 450px;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+/* Title of the form */
+.formTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* Main container for the custom dropdown select */
+.customSelect {
+  position: relative;
+  width: 100%;
+}
+
+/* The selected item, which acts as the dropdown button */
+.selectSelected {
+  background-color: #f1f1f1;
+  border: 1px solid #cccccc;
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  color: #555555;
+  font-size: 1rem;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Hover effect for the dropdown button */
+.selectSelected:hover {
+  background-color: #e2e2e2;
+  border-color: #a0a0a0;
+}
+
+/* Dropdown list for the selectable items */
+.selectItems {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  border-radius: 8px;
+  z-index: 99;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* Individual items in the dropdown list */
+.selectItems div {
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  color: #333333;
+  font-size: 1rem;
+  transition: background-color 0.2s;
+}
+
+/* Hover effect for dropdown items */
+.selectItems div:hover {
+  background-color: #f0f0f0;
+}
