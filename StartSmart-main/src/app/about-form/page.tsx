@@ -3,17 +3,36 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import "../style.css"; // Adjust path if your CSS is located elsewhere
 
+// Import Realtime Database helpers and config
+import { ref, push, set } from "firebase/database";
+import { db } from "../lib/firebaseconfig"; // Ensure db is getDatabase(app) in firebaseconfig
+
 const AboutPage = () => {
   const [name, setName] = useState("");
   const router = useRouter();
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if (!name.trim()) {
       alert("Please enter your name!");
       return;
     }
-    // Navigate to branch-form with name as query param
-    router.push(`/branch-form?name=${encodeURIComponent(name.trim())}`);
+    try {
+      // Create a reference to the "users" node
+      const usersRef = ref(db, "users");
+      // Generate a new child location using push()
+      const newUserRef = push(usersRef);
+      // Save the user data
+      await set(newUserRef, {
+        name: name.trim(),
+        createdAt: Date.now(),
+      });
+
+      // Navigate to next page after successful save
+      router.push(`/branch-form?name=${encodeURIComponent(name.trim())}`);
+    } catch (e) {
+      console.error("Error saving data: ", e);
+      alert("Something went wrong: " + e.message);
+    }
   };
 
   return (
@@ -85,6 +104,13 @@ const AboutPage = () => {
             display: "block",
             boxSizing: "border-box",
           }}
+          onKeyDown={(e) => {
+            // Optional: Allow Enter key to submit
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleContinue();
+            }
+          }}
         />
       </div>
 
@@ -92,6 +118,7 @@ const AboutPage = () => {
         className="cta-button"
         style={{ fontSize: "18px", padding: "14px 28px" }}
         onClick={handleContinue}
+        type="button"
       >
         lets start!!
       </button>
