@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { db } from "../firebaseconfig"; // Update this path
+import { ref, update } from "firebase/database";
 
 export default function EducationField() {
   const [selectedBranch, setSelectedBranch] = useState("");
@@ -16,6 +18,10 @@ export default function EducationField() {
     "Computer Science and Engineering",
     "Mechanical Engineering",
   ];
+
+  // A unique user ID is required. In a real app, this would come from an auth service.
+  // For now, we'll use the ID from your database example
+  const userId = "some-unique-user-id";
 
   useEffect(() => {
     if (searchQuery.trim() === "") {
@@ -34,8 +40,23 @@ export default function EducationField() {
     setSelectedBranch(branch);
   };
 
-  const handleCircleClick = () => {
-    router.push("/sem-form");
+  const handleCircleClick = async () => {
+    if (selectedBranch) {
+      try {
+        // Create a reference to the user's data in the database
+        const userRef = ref(db, `users/${userId}`);
+
+        // Use the 'update' method to add or overwrite the 'educationField' in the same node
+        await update(userRef, {
+          educationField: selectedBranch,
+        });
+
+        console.log("Branch successfully stored in Firebase Realtime Database!");
+        router.push("/sem-form");
+      } catch (error) {
+        console.error("Error writing to database:", error);
+      }
+    }
   };
 
   return (

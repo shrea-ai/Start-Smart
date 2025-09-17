@@ -4,8 +4,8 @@ import { useRouter } from "next/navigation";
 import "../style.css"; // Adjust path if your CSS is located elsewhere
 
 // Import Realtime Database helpers and config
-import { ref, push, set } from "firebase/database";
-import { db } from "../lib/firebaseconfig"; // Ensure db is getDatabase(app) in firebaseconfig
+import { ref, set } from "firebase/database";
+import { db } from "../firebaseconfig"; // Uses Realtime Database instance (getDatabase)
 
 const AboutPage = () => {
   const [name, setName] = useState("");
@@ -17,21 +17,30 @@ const AboutPage = () => {
       return;
     }
     try {
-      // Create a reference to the "users" node
-      const usersRef = ref(db, "users");
-      // Generate a new child location using push()
-      const newUserRef = push(usersRef);
-      // Save the user data
-      await set(newUserRef, {
+      // Create a safe key from the name (replace characters that Firebase doesn't allow in keys)
+      const safeKey = name.trim().replace(/[.#$\/\[\]]/g, '_');
+      
+      // Create a reference to the "users" node with the safe key
+      const userRef = ref(db, `users/${safeKey}`);
+      
+      // Save the user data with name as the node key
+      await set(userRef, {
         name: name.trim(),
         createdAt: Date.now(),
       });
 
+      console.log("Data saved with key:", safeKey);
+      
+      // Store both the original name and safe key for future use
+      localStorage.setItem('username', name.trim());
+      localStorage.setItem('userKey', safeKey);
+      
       // Navigate to next page after successful save
-      router.push(`/branch-form?name=${encodeURIComponent(name.trim())}`);
+      router.push(`/branch-form?username=${encodeURIComponent(name.trim())}&userKey=${encodeURIComponent(safeKey)}`);
     } catch (e) {
+      const errorMessage = e instanceof Error ? e.message : String(e);
       console.error("Error saving data: ", e);
-      alert("Something went wrong: " + e.message);
+      alert("Something went wrong: " + errorMessage);
     }
   };
 
@@ -54,7 +63,7 @@ const AboutPage = () => {
           marginBottom: "24px",
         }}
       >
-        Welcome!! Let's get to know you for finding your project
+        Welcome!! Let&apos;s get to know you for finding your project
       </h1>
       <p
         style={{
@@ -66,7 +75,8 @@ const AboutPage = () => {
           marginRight: "auto",
         }}
       >
-        This is where you can share your skills and interests to get personalized project matches.
+        This is where you can share your skills and interests to get
+        personalized project matches.
       </p>
 
       <div style={{ marginBottom: "24px" }}>
