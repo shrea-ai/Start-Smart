@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { ref, update } from "firebase/database";
+import { db } from "../firebaseconfig";
 
 export default function EducationField() {
   const [selectedBranch, setSelectedBranch] = useState("");
@@ -9,6 +11,8 @@ export default function EducationField() {
   const [filteredBranches, setFilteredBranches] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const nameParam = searchParams.get("name") || "";
 
   const allBranches = ["SEM I", "SEM II", "SEM III", "SEM IV"];
 
@@ -29,8 +33,17 @@ export default function EducationField() {
     setSelectedBranch(branch);
   };
 
-  const handleCircleClick = () => {
-    router.push("/knownskills-form");
+  const handleCircleClick = async () => {
+    try {
+      const trimmedName = nameParam.trim();
+      const safeKey = trimmedName.replace(/[.#$\[\]\/]/g, "_");
+      if (selectedBranch) {
+        await update(ref(db, `users/${safeKey}`), { sem: selectedBranch });
+      }
+    } finally {
+      const nextUrl = `/knownskills-form?name=${encodeURIComponent(nameParam)}`;
+      router.push(nextUrl);
+    }
   };
 
   return (

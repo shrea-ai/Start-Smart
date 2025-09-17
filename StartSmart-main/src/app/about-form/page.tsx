@@ -5,7 +5,7 @@ import "../style.css"; // Adjust path if your CSS is located elsewhere
 
 // Import Realtime Database helpers and config
 import { ref, set } from "firebase/database";
-import { db } from "../firebaseconfig"; // Uses Realtime Database instance (getDatabase)
+import { db } from "../firebaseconfig"; // Uses Realtime Database instance (getDatabase)
 
 const AboutPage = () => {
   const [name, setName] = useState("");
@@ -17,26 +17,18 @@ const AboutPage = () => {
       return;
     }
     try {
-      // Create a safe key from the name (replace characters that Firebase doesn't allow in keys)
-      const safeKey = name.trim().replace(/[.#$\/\[\]]/g, '_');
-      
-      // Create a reference to the "users" node with the safe key
+      const trimmedName = name.trim();
+      // Firebase keys cannot contain . $ # [ ] /
+      const safeKey = trimmedName.replace(/[.#$\[\]\/]/g, "_");
+      // Save the user using their name as the key: users/<name>
       const userRef = ref(db, `users/${safeKey}`);
-      
-      // Save the user data with name as the node key
       await set(userRef, {
-        name: name.trim(),
+        name: trimmedName,
         createdAt: Date.now(),
       });
 
-      console.log("Data saved with key:", safeKey);
-      
-      // Store both the original name and safe key for future use
-      localStorage.setItem('username', name.trim());
-      localStorage.setItem('userKey', safeKey);
-      
       // Navigate to next page after successful save
-      router.push(`/branch-form?username=${encodeURIComponent(name.trim())}&userKey=${encodeURIComponent(safeKey)}`);
+      router.push(`/branch-form?name=${encodeURIComponent(trimmedName)}`);
     } catch (e) {
       const errorMessage = e instanceof Error ? e.message : String(e);
       console.error("Error saving data: ", e);
@@ -63,7 +55,7 @@ const AboutPage = () => {
           marginBottom: "24px",
         }}
       >
-        Welcome!! Let&apos;s get to know you for finding your project
+        Welcome!! Let&apos;s get to know you for finding your project
       </h1>
       <p
         style={{
