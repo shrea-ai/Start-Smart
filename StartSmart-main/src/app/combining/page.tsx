@@ -6,15 +6,17 @@ export default function SummaryPage() {
   const [showBackArrow, setShowBackArrow] = useState(false);
   const router = useRouter();
 
+  // This useEffect handles the automatic redirection after the animation.
   useEffect(() => {
-    const timer = setTimeout(() => {
-      // You had isLoading which you didn't use visually,
-      // can be removed or if needed, add spinner here
-      // setIsLoading(false);
-    }, 3000);
-    return () => clearTimeout(timer);
-  }, []);
+    // The animation for the text is 8 seconds long, so we redirect after that.
+    const redirectTimer = setTimeout(() => {
+      router.push('/dashboard');
+    }, 8000); // Redirect after 8 seconds (matching the typing animation)
 
+    return () => clearTimeout(redirectTimer);
+  }, [router]);
+
+  // This useEffect handles the keyboard events for the back arrow.
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft') {

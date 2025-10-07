@@ -54,7 +54,7 @@ export default function EducationField() {
   return (
     <div className="container">
       <div className="educationFieldTitle">
-        Enter your current Education Field
+        Enter your current education field
       </div>
 
       <input

@@ -53,24 +53,6 @@ const FEATURES = [
     description:
       "Filter projects by programming languages, frameworks, difficulty level, and time commitment to find your perfect fit.",
   },
-  {
-    icon: "📈",
-    title: "Career Growth",
-    description:
-      "Discover projects that align with your career aspirations and help you build a portfolio that stands out.",
-  },
-  {
-    icon: "👥",
-    title: "Team Collaboration",
-    description:
-      "Find team projects and connect with like-minded students to build amazing things together.",
-  },
-  {
-    icon: "🏆",
-    title: "Achievement Tracking",
-    description:
-      "Track your progress, celebrate milestones, and showcase your completed projects to potential employers.",
-  },
 ];
 
 const TESTIMONIALS = [
@@ -121,10 +103,10 @@ const CTAButton: React.FC<{
       window.location.href = "/about-form";
     } else {
       setButtonText("Coming Soon!");
-      setBg("linear-gradient(135deg, #10b981, #059669)");
+      setBg("linear-gradient(135deg, #6b7280, #4b5563)");
       setTimeout(() => {
         setButtonText("Get Started Free");
-        setBg("linear-gradient(135deg, #6366f1, #4f46e5)");
+        setBg("linear-gradient(135deg, #374151, #1f2937)");
       }, 2000);
     }
   }
@@ -189,8 +171,8 @@ const Page = () => {
                   x2="100%"
                   y2="100%"
                 >
-                  <stop offset="0%" stopColor="#6366f1" />
-                  <stop offset="100%" stopColor="#4f46e5" />
+                  <stop offset="0%" stopColor="#374151" />
+                  <stop offset="100%" stopColor="#1f2937" />
                 </linearGradient>
               </defs>
             </svg>
@@ -308,7 +290,7 @@ const Page = () => {
           <div className="container">
             <div className="section-header">
               <h2>How It Works</h2>
-              <p>Get matched with your ideal projects in three simple steps</p>
+              <p>Get matched with your ideal projects in two simple steps</p>
             </div>
             <div className="steps">
               <div className="step">
@@ -328,16 +310,6 @@ const Page = () => {
                   <p>
                     Our intelligent algorithm searches thousands of projects and
                     finds the ones that match your goals and skill level.
-                  </p>
-                </div>
-              </div>
-              <div className="step">
-                <div className="step-number">3</div>
-                <div className="step-content">
-                  <h3>Start Building</h3>
-                  <p>
-                    Choose your favorite projects, join teams, and start
-                    building your portfolio with guidance and resources.
                   </p>
                 </div>
               </div>
@@ -387,8 +359,8 @@ const Page = () => {
                       x2="100%"
                       y2="100%"
                     >
-                      <stop offset="0%" stopColor="#6366f1" />
-                      <stop offset="100%" stopColor="#4f46e5" />
+                      <stop offset="0%" stopColor="#374151" />
+                      <stop offset="100%" stopColor="#1f2937" />
                     </linearGradient>
                   </defs>
                 </svg>
